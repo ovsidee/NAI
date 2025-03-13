@@ -34,23 +34,25 @@ public class KNNClassifier {
     }
 
     public String classify(DataPoint point) {
-        PriorityQueue<Neighbor> pq = new PriorityQueue<>(Comparator.comparingDouble(n -> -n.distance)); // because minHeap and we need reverse
+        PriorityQueue<Neighbor> pq = new PriorityQueue<>(Comparator.comparingDouble(n -> n.distance)); // because minHeap and we need to reverse
+
         for (DataPoint trainPoint : trainData) {
             double distance = euclideanDistance(point.features, trainPoint.features);
             pq.add(new Neighbor(trainPoint.label, distance));
+
             if (pq.size() > k) {
-                pq.poll();
+                pq.poll(); //will remove the furthest element (we need the closest element)
             }
         }
 
-        Map<String, Integer> labelCounts = new HashMap<>();
+        Map<String, Integer> labelCounts = new HashMap<>(); //key - name of the flower, value - number of it`s appearances
         for (Neighbor neighbor : pq) {
             labelCounts.put(neighbor.label, labelCounts.getOrDefault(neighbor.label, 0) + 1);
         }
 
         return labelCounts.entrySet().stream()
                 .max(Map.Entry.comparingByValue())
-                .get().getKey();
+                .get().getKey(); //searching by the most appeared flower name
     }
 
     public double evaluate(String testFilename) throws IOException {

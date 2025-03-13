@@ -6,4 +6,5 @@ public class Neighbor {
         this.label = label;
         this.distance = distance;
     }
+
 }

@@ -4,16 +4,23 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("enter k-value: ");
+
+        System.out.println("Provide k-number: ");
         int k = scanner.nextInt();
-        scanner.nextLine();
-        String trainFile = "F:\\githubAllRepositories\\NAI\\k-NN project\\k-NN\\dataFiles\\iris.data";
-        String testFile = "F:\\githubAllRepositories\\NAI\\k-NN project\\k-NN\\dataFiles\\iris.test.data";
+        scanner.nextLine();  // FIX: newline
+
+        System.out.println("Provide training data: (filename)");
+        String trainFile = scanner.nextLine();
+        String trainFilePath = "./k-NN/dataFiles/" + trainFile;
+
+        System.out.println("Provide test set data: (filename)");
+        String testFile = scanner.nextLine();
+        String testFilePath = "./k-NN/dataFiles/" + testFile;
 
         KNNClassifier knn = new KNNClassifier(k);
-        knn.loadTrainingData(trainFile);
+        knn.loadTrainingData(trainFilePath);
 
-        double accuracy = knn.evaluate(testFile);
+        double accuracy = knn.evaluate(testFilePath);
         System.out.println("Accuracy: " + accuracy * 100 + "%");
         System.out.println("Enter features (comma-separated) or 'exit' to quit:");
         while (true) {
@@ -27,11 +34,11 @@ public class Main {
 
             String[] values = input.split(",");
             double[] features = new double[values.length];
-
             try {
                 for (int i = 0; i < features.length; i++) {
                     features[i] = Double.parseDouble(values[i].trim());
                 }
+
                 DataPoint userPoint = new DataPoint(features, "");
                 System.out.println("Predicted class: " + knn.classify(userPoint));
             } catch (NumberFormatException e) {
