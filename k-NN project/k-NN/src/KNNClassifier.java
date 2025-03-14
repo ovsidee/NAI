@@ -34,7 +34,7 @@ public class KNNClassifier {
     }
 
     public String classify(DataPoint point) {
-        PriorityQueue<Neighbor> pq = new PriorityQueue<>(Comparator.comparingDouble(n -> n.distance)); // because minHeap and we need to reverse
+        PriorityQueue<Neighbor> pq = new PriorityQueue<>(Comparator.comparingDouble(n -> -n.distance)); // because minHeap and we need to reverse
 
         for (DataPoint trainPoint : trainData) {
             double distance = euclideanDistance(point.features, trainPoint.features);
