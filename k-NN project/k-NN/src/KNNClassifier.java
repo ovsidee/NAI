@@ -34,25 +34,30 @@ public class KNNClassifier {
     }
 
     public String classify(DataPoint point) {
-        PriorityQueue<Neighbor> pq = new PriorityQueue<>(Comparator.comparingDouble(n -> n.distance)); // because minHeap and we need to reverse
-
+        //  calculate distances to all training points
+        List<Neighbor> neighbors = new ArrayList<>();
         for (DataPoint trainPoint : trainData) {
             double distance = euclideanDistance(point.features, trainPoint.features);
-            pq.add(new Neighbor(trainPoint.label, distance));
-
-            if (pq.size() > k) {
-                pq.poll(); //will remove the furthest element (we need the closest element)
-            }
+            neighbors.add(new Neighbor(trainPoint.label, distance));
         }
 
-        Map<String, Integer> labelCounts = new HashMap<>(); //key - name of the flower, value - number of it`s appearances
-        for (Neighbor neighbor : pq) {
-            labelCounts.put(neighbor.label, labelCounts.getOrDefault(neighbor.label, 0) + 1);
+        // sort by distance
+        neighbors.sort(Comparator.comparingDouble(n -> n.distance));
+
+        // count accurances of each type of flower
+        Map<String, Integer> labelCounts = new HashMap<>();
+        for (int i = 0; i < k; i++) {
+            Neighbor neighbor = neighbors.get(i);
+            labelCounts.put(
+                    neighbor.label,
+                    labelCounts.getOrDefault(neighbor.label, 0) + 1
+            );
         }
 
+        // get the name of the flower with the highest count
         return labelCounts.entrySet().stream()
                 .max(Map.Entry.comparingByValue())
-                .get().getKey(); //searching by the most appeared flower name
+                .get().getKey();
     }
 
     public double evaluate(String testFilename) throws IOException {

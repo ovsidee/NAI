@@ -7,15 +7,17 @@ public class Main {
 
         System.out.println("Provide k-number: ");
         int k = scanner.nextInt();
-        scanner.nextLine();  // FIX: newline
 
         System.out.println("Provide training data: (filename)");
-        String trainFile = scanner.nextLine();
-        String trainFilePath = "./k-NN/dataFiles/" + trainFile;
+        String trainFile = scanner.next();
+//        String trainFilePath = "k-NN/dataFiles/" + trainFile;
+        String trainFilePath = "C:\\Users\\Vital\\Desktop\\NAI\\k-NN project\\k-NN\\dataFiles\\iris.data";
+
 
         System.out.println("Provide test set data: (filename)");
-        String testFile = scanner.nextLine();
-        String testFilePath = "./k-NN/dataFiles/" + testFile;
+        String testFile = scanner.next();
+//        String testFilePath = "k-NN/dataFiles/" + testFile;
+        String testFilePath = "C:\\Users\\Vital\\Desktop\\NAI\\k-NN project\\k-NN\\dataFiles\\iris.test.data";
 
         KNNClassifier knn = new KNNClassifier(k);
         knn.loadTrainingData(trainFilePath);
@@ -24,7 +26,7 @@ public class Main {
         System.out.println("Accuracy: " + accuracy * 100 + "%");
         System.out.println("Enter features (comma-separated) or 'exit' to quit:");
         while (true) {
-            String input = scanner.nextLine().trim();
+            String input = scanner.next();
 
             if (input.equalsIgnoreCase("exit")) break;
             if (input.isEmpty()) {
